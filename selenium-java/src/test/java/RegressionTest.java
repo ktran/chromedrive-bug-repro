@@ -68,13 +68,11 @@ public class RegressionTest {
   public void executeScript_newDate_shouldReturnString() {
     /*
     This test reproduces the bug where executeScript("return new Date();")
-    returns an empty map instead of a date string in Chrome 111, leading to a ClassCastException.
-    The test navigates to a simple page, executes the script, and asserts that the returned
-    value is an instance of String. This assertion is expected to fail if the bug is present.
+    returns an empty map, which cannot be casted to a String. Prior to Chrome 111, this worked.
      */
     driver.get("https://www.selenium.dev/");
     JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-    // The test is expected to fail here, as ChromeDriver returns an empty map instead of a string.
+    // The test is expected to fail here
     // In Chrome 110, this would return a String like "2023-03-16T20:09:48.840Z".
     String date = (String) jsExecutor.executeScript("return new Date();");
     System.out.println("Returned date: " + date);
