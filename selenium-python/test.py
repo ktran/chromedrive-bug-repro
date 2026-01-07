@@ -54,5 +54,22 @@ def test_should_be_able_to_navigate_to_google_com(driver):
 
 @pytest.mark.timeout(TIMEOUT)
 def test_issue_reproduction(driver):
-    """Add test reproducing the issue here."""
-    pass
+    """
+    This test reproduces the ChromeDriver bug where `driver.current_url` returns an incoherent URL
+    when navigating to an archived page on `web.archive.org`.
+
+    Reproduction Steps:
+    1. Navigate to an archived page on `web.archive.org`.
+    2. Retrieve the `driver.current_url`.
+
+    Expected Failure:
+    The test asserts that `driver.current_url` should be the `archive.org` URL.
+    However, due to the bug (crbug.com/42323616), `driver.current_url` returns the original
+    website's URL (http://tilde.town/) instead of the expected `archive.org` URL.
+    Therefore, this assertion is expected to fail if the bug exists.
+    """
+    expected_url = "https://web.archive.org/web/20231003135536/http://tilde.town/"
+    driver.get(expected_url)
+    logging.info(f"Current URL: {driver.current_url}")
+    # The bug causes driver.current_url to be 'http://tilde.town/' instead of 'expected_url'
+    assert driver.current_url == expected_url
