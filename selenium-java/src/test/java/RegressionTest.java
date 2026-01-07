@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -64,7 +65,18 @@ public class RegressionTest {
   }
 
   @Test
-  public void ISSUE_REPRODUCTION() {
-    // Add test reproducing the issue here.
+  public void executeScript_newDate_shouldReturnString() {
+    /*
+    This test reproduces the bug where executeScript("return new Date();")
+    returns an empty map instead of a date string in Chrome 111, leading to a ClassCastException.
+    The test navigates to a simple page, executes the script, and asserts that the returned
+    value is an instance of String. This assertion is expected to fail if the bug is present.
+     */
+    driver.get("https://www.selenium.dev/");
+    JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+    // The test is expected to fail here, as ChromeDriver returns an empty map instead of a string.
+    // In Chrome 110, this would return a String like "2023-03-16T20:09:48.840Z".
+    String date = (String) jsExecutor.executeScript("return new Date();");
+    System.out.println("Returned date: " + date);
   }
 }
