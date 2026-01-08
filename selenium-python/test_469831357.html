@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Test page for crbug.com/469831357</title>
+</head>
+
+<body>
+  <div id="shadow-host"></div>
+  <script>
+    const shadowHost = document.getElementById('shadow-host');
+    const shadowRoot = shadowHost.attachShadow({ mode: 'closed' });
+    const iframe = document.createElement('iframe');
+    iframe.srcdoc = '<button onclick="alert(\'Button clicked!\')">Click me</button>';
+    shadowRoot.appendChild(iframe);
+  </script>
+</body>
+
+</html>

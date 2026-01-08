@@ -13,8 +13,10 @@
 #  limitations under the License.
 
 import logging
+import os
 import pytest
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
@@ -53,6 +55,23 @@ def test_should_be_able_to_navigate_to_google_com(driver):
 
 
 @pytest.mark.timeout(TIMEOUT)
-def test_issue_reproduction(driver):
-    """Add test reproducing the issue here."""
-    pass
+def test_issue_469831357_reproduction(driver):
+    """
+    This test reproduces crbug.com/469831357.
+    """
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_469831357.html')
+    file_url = f'file://{html_path}'
+
+    driver.get(file_url)
+
+    shadow_host = driver.find_element(By.ID, 'shadow-host')
+    shadow_root = shadow_host.shadow_root
+    iframe = shadow_root.find_element(By.CSS_SELECTOR, 'iframe')
+
+    # Now, switch to the iframe context
+    driver.switch_to.frame(iframe)
+
+    # Attempt to find and click the button within the iframe
+    button = driver.find_element(By.TAG_NAME, 'button')
+    # This is the step that is expected to fail due to the bug.
+    button.click()
