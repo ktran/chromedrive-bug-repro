@@ -37,7 +37,7 @@ public class RegressionTest {
     // By default, the test uses the latest stable Chrome version.
     // Replace the "stable" with the specific browser version if needed,
     // e.g. 'canary', '115' or '144.0.7534.0' for example.
-    options.setBrowserVersion("stable");
+    options.setBrowserVersion("120.0.6099.109");
 
     ChromeDriverService service =
         new ChromeDriverService.Builder()
@@ -65,6 +65,9 @@ public class RegressionTest {
 
   @Test
   public void ISSUE_REPRODUCTION() {
-    // Add test reproducing the issue here.
+    String initialUrl = "http://httpforever.com/";
+    driver.get(initialUrl);
+    String actualUrl = driver.getCurrentUrl();
+    assertEquals(initialUrl, actualUrl);
   }
 }
