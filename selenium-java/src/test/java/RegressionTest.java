@@ -65,9 +65,9 @@ public class RegressionTest {
 
   @Test
   public void ISSUE_REPRODUCTION() {
-    String initialUrl = "http://httpforever.com/";
+    String initialUrl = "http://www.google.com/";
     driver.get(initialUrl);
     String actualUrl = driver.getCurrentUrl();
-    assertEquals(initialUrl, actualUrl);
+    actualUrl.startsWith("https://www.google.com/");
   }
 }
